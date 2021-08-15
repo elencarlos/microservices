@@ -1,14 +1,15 @@
 package com.ms.hrworker.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Objects;
 
-@Table(name = "worker")
+@Table(name = "tb_worker")
 @Entity
 public class Worker implements Serializable {
     private static final long serialVersionUID = 1L;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false)
     @Id
     private Long id;
     private String name;
@@ -47,4 +48,16 @@ public class Worker implements Serializable {
         this.dailyIncome = dailyIncome;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Worker worker = (Worker) o;
+        return Objects.equals(id, worker.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }
