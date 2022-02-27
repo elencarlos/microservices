@@ -4,7 +4,6 @@ package com.ms.hrpayroll.resources;
 import com.ms.hrpayroll.entities.Payment;
 import com.ms.hrpayroll.services.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
