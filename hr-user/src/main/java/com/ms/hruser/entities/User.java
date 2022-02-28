@@ -10,10 +10,13 @@ import java.util.Set;
 @Table(name = "tb_user")
 public class User implements Serializable {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false)
     private Long id;
 
     private String name;
 
+    @Column(unique = true)
     private String email;
 
     private String password;
