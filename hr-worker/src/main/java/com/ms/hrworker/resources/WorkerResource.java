@@ -23,7 +23,6 @@ import java.util.Optional;
 public class WorkerResource {
 
     private static final Logger LOG = LoggerFactory.getLogger(WorkerResource.class);
-    @Value("${test.config}") String testConfig;
 
     @Autowired
     private Environment environment;
@@ -35,11 +34,6 @@ public class WorkerResource {
     public ResponseEntity<List<Worker>> findAll(){
         List<Worker> list = repository.findAll();
         return ResponseEntity.ok(list);
-    }
-    @GetMapping("/config")
-    public ResponseEntity<Void> getConfig(){
-        LOG.info("CONFIG = " + testConfig);
-        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/{id}")

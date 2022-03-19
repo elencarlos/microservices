@@ -23,7 +23,7 @@ public class User implements UserDetails, Serializable {
 
     private String password;
 
-    private Set<Role> roles = new HashSet<>();
+    private final Set<Role> roles = new HashSet<>();
 
 
     public User() {
@@ -64,7 +64,7 @@ public class User implements UserDetails, Serializable {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles
                 .stream()
-                .map(x -> new SimpleGrantedAuthority(x.getRoleName()))
+                .map(role -> new SimpleGrantedAuthority(role.getRoleName()))
                 .collect(Collectors.toList());
     }
 
