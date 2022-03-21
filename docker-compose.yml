@@ -3,14 +3,12 @@ version: '3.5'
 networks:
   ms-net:
 
-
 services:
   ms-config-server:
-    image: ms-config-server:v1
     container_name: ms-config-server
-#    volumes:
-#      - ./ms-config-server/:/usr/app
-#      - $HOME/.m2:/root/.m2
+    volumes:
+      - ./ms-config-server/:/usr/app
+      - $HOME/.m2:/root/.m2
     build:
       context: ms-config-server
       dockerfile: Dockerfile
@@ -19,6 +17,109 @@ services:
       - ms-net
     expose:
       - 8888
+    ports:
+      - "8888:8888"
+    depends_on:
+      - ms-user-pg12
+      - ms-worker-pg12
+
+  ms-api-gateway:
+    container_name: ms-api-gateway
+    volumes:
+      - ./ms-api-gateway-zuul/:/usr/app
+      - $HOME/.m2:/root/.m2
+    build:
+      context: ms-api-gateway-zuul
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    networks:
+      - ms-net
+    expose:
+      - 8765
+    ports:
+      - "8765:8765"
+    depends_on:
+      - ms-config-server
+      - ms-eureka-server
+
+  ms-eureka-server:
+    container_name: ms-eureka-server
+    volumes:
+      - ./ms-eureka-server/:/usr/app
+      - $HOME/.m2:/root/.m2
+    build:
+      context: ms-eureka-server
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    networks:
+      - ms-net
+    expose:
+      - 8761
+    ports:
+      - "8761:8761"
+    depends_on:
+      - ms-config-server
+
+  ms-oauth:
+    container_name: ms-oauth
+    volumes:
+      - ./ms-oauth/:/usr/app
+      - $HOME/.m2:/root/.m2
+    build:
+      context: ms-oauth
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    networks:
+      - ms-net
+    depends_on:
+      - ms-config-server
+      - ms-eureka-server
+
+  ms-payroll:
+    container_name: ms-payroll
+    volumes:
+      - ./ms-payroll/:/usr/app
+      - $HOME/.m2:/root/.m2
+    build:
+      context: ms-payroll
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    networks:
+      - ms-net
+    depends_on:
+      - ms-config-server
+      - ms-eureka-server
+
+  ms-user:
+    container_name: ms-user
+    volumes:
+      - ./ms-user/:/usr/app
+      - $HOME/.m2:/root/.m2
+    build:
+      context: ms-user
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    networks:
+      - ms-net
+    depends_on:
+      - ms-config-server
+      - ms-eureka-server
+
+  ms-worker:
+    container_name: ms-worker
+    volumes:
+      - ./ms-worker/:/usr/app
+      - $HOME/.m2:/root/.m2
+    build:
+      context: ms-worker
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    networks:
+      - ms-net
+    depends_on:
+      - ms-config-server
+      - ms-eureka-server
+
   ms-worker-pg12:
     container_name: ms-worker-pg12
     image: 'postgres:12-alpine'
