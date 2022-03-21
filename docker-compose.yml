@@ -1,0 +1,49 @@
+version: '3.5'
+
+networks:
+  ms-net:
+
+
+services:
+  ms-config-server:
+    image: ms-config-server:v1
+    container_name: ms-config-server
+#    volumes:
+#      - ./ms-config-server/:/usr/app
+#      - $HOME/.m2:/root/.m2
+    build:
+      context: ms-config-server
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    networks:
+      - ms-net
+    expose:
+      - 8888
+  ms-worker-pg12:
+    container_name: ms-worker-pg12
+    image: 'postgres:12-alpine'
+    expose:
+      - 5432
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=ms_worker
+    restart: unless-stopped
+    networks:
+      - ms-net
+  ms-user-pg12:
+    container_name: ms-user-pg12
+    image: 'postgres:12-alpine'
+    expose:
+      - 5432
+    ports:
+      - "5433:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=ms_user
+    restart: unless-stopped
+    networks:
+      - ms-net

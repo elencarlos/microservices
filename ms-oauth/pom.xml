@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.ms</groupId>
-    <artifactId>rh-oauth</artifactId>
+    <artifactId>ms-oauth</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>rh-oauth</name>
     <description>rh-oauth</description>

@@ -21,13 +21,12 @@ import java.util.Optional;
 @RequestMapping(value = "/workers")
 public class WorkerResource {
 
-    private static final Logger LOG = LoggerFactory.getLogger(WorkerResource.class);
 
-    @Autowired
-    private Environment environment;
+    private final WorkerRepository repository;
 
-    @Autowired
-    private WorkerRepository repository;
+    public WorkerResource(WorkerRepository repository) {
+        this.repository = repository;
+    }
 
     @GetMapping
     public ResponseEntity<List<Worker>> findAll(){
@@ -38,7 +37,6 @@ public class WorkerResource {
     @GetMapping("/{id}")
     public ResponseEntity<Worker> findById(@PathVariable Long id){
         Optional<Worker> worker = repository.findById(id);
-        LOG.info("PORT = " + environment.getProperty("local.server.port"));
         if(worker.isEmpty()){
             return ResponseEntity.badRequest().build();
         }
